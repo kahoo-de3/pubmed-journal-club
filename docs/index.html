@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b6b5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="抄読会PubMed">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>抄読会 PubMed｜高IF文献ダイジェスト</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#fff; --ink:#171a1d; --sub:#5d656e; --line:#e3e7eb;
+    --chip:#eef1f4; --chip-ink:#39424c;
+    --a:#0b6b5c; --a-soft:#e6f2ef; --a-ink:#0b6b5c;
+    --b:#8a4b16; --b-soft:#f7ece2; --b-ink:#8a4b16;
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#14171a; --card:#1d2126; --ink:#e9edf1; --sub:#9aa4ae; --line:#2c3238;
+      --chip:#272d34; --chip-ink:#c2cad2;
+      --a:#4fbfa8; --a-soft:#123330; --a-ink:#6fd3bd;
+      --b:#d9954f; --b-soft:#37281a; --b-ink:#e8b174;
+    }
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",
+                "Noto Sans JP","Meiryo",system-ui,sans-serif;
+    font-size:15px;line-height:1.72;
+    padding-bottom:calc(28px + var(--safe-b));
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:0 14px}
+
+  /* ---- header ---- */
+  header{
+    background:linear-gradient(135deg,#0b6b5c,#0d5a68);color:#fff;
+    padding:calc(18px + env(safe-area-inset-top,0px)) 14px 16px;
+  }
+  header .inner{max-width:780px;margin:0 auto}
+  h1{font-size:18px;margin:0 0 3px;letter-spacing:.02em;font-weight:700}
+  .sub{font-size:12px;opacity:.82;margin:0}
+
+  /* ---- control bar ---- */
+  .bar{
+    position:sticky;top:0;z-index:20;background:var(--card);
+    border-bottom:1px solid var(--line);padding:10px 14px;
+    box-shadow:0 1px 8px rgba(0,0,0,.05);
+  }
+  .bar .inner{max-width:780px;margin:0 auto;display:flex;gap:9px;align-items:center}
+  label.sel{flex:1;position:relative;display:block}
+  select{
+    -webkit-appearance:none;appearance:none;width:100%;
+    font:inherit;font-size:15.5px;font-weight:600;color:var(--ink);
+    background:var(--chip);border:1px solid var(--line);border-radius:10px;
+    padding:11px 38px 11px 13px;line-height:1.3;
+  }
+  label.sel::after{
+    content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;
+    border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);
+    transform:translateY(-70%) rotate(45deg);pointer-events:none;
+  }
+  button.refresh{
+    flex:none;font:inherit;font-size:14px;font-weight:600;color:#fff;
+    background:var(--a);border:0;border-radius:10px;padding:11px 15px;cursor:pointer;
+    white-space:nowrap;
+  }
+  button.refresh:active{opacity:.75}
+  button.refresh[disabled]{opacity:.5}
+
+  /* ---- status ---- */
+  .status{font-size:12px;color:var(--sub);padding:10px 0 2px;text-align:center}
+  .status.err{color:#c0392b}
+
+  /* ---- section ---- */
+  section{margin:22px 0 0}
+  .sechd{display:flex;align-items:center;gap:9px;margin:0 0 4px}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .sec-a .dot{background:var(--a)} .sec-b .dot{background:var(--b)}
+  h2{font-size:17px;margin:0;font-weight:700}
+  .count{font-size:12px;color:var(--sub);font-weight:600;margin-left:auto}
+  .secbar{height:3px;border-radius:2px;margin:7px 0 10px}
+  .sec-a .secbar{background:var(--a)} .sec-b .secbar{background:var(--b)}
+  .secnote{font-size:12.5px;color:var(--sub);margin:0 0 14px}
+
+  /* ---- card ---- */
+  article{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:15px 15px 13px;margin-bottom:11px;
+  }
+  .sec-a article{border-left:4px solid var(--a)}
+  .sec-b article{border-left:4px solid var(--b)}
+  .row1{display:flex;gap:9px;align-items:flex-start;margin-bottom:6px}
+  .no{
+    flex:none;font-size:12px;font-weight:700;color:#fff;border-radius:6px;
+    padding:2px 8px;margin-top:3px;
+  }
+  .sec-a .no{background:var(--a)} .sec-b .no{background:var(--b)}
+  .tj{font-weight:700;font-size:15px;line-height:1.5}
+  .te{font-size:12.5px;color:var(--sub);line-height:1.5;margin-top:3px}
+  .meta{font-size:12px;color:var(--sub);margin:0 0 8px}
+  .chips{margin:0 0 9px}
+  .chip{
+    display:inline-block;background:var(--chip);color:var(--chip-ink);
+    border-radius:5px;font-size:11px;padding:2px 8px;margin:0 5px 5px 0;
+  }
+  .sec-a .chip.if{background:var(--a-soft);color:var(--a-ink);font-weight:700}
+  .sec-b .chip.if{background:var(--b-soft);color:var(--b-ink);font-weight:700}
+  .chip.warn{background:#fdf3d8;color:#7a5c10;font-weight:600}
+  @media (prefers-color-scheme:dark){.chip.warn{background:#3a2f13;color:#e5c56a}}
+  .sum{font-size:14px;margin:0 0 10px}
+  details{border-top:1px dashed var(--line);padding-top:9px}
+  summary{
+    font-size:13px;font-weight:700;cursor:pointer;list-style:none;
+    display:flex;align-items:center;gap:6px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{
+    content:"";width:7px;height:7px;border-right:2px solid currentColor;
+    border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;
+  }
+  details[open] summary::before{transform:rotate(45deg)}
+  .sec-a summary{color:var(--a-ink)} .sec-b summary{color:var(--b-ink)}
+  .pt{font-size:13.5px;color:var(--ink);margin:8px 0 0;padding-left:13px;
+      border-left:3px solid var(--line)}
+  .links{margin-top:10px;display:flex;gap:8px}
+  .links a{
+    flex:1;text-align:center;text-decoration:none;font-size:13px;font-weight:600;
+    padding:9px 6px;border-radius:9px;border:1px solid var(--line);
+    background:var(--chip);color:var(--chip-ink);
+  }
+  .sec-a .links a.main{background:var(--a-soft);color:var(--a-ink);border-color:transparent}
+  .sec-b .links a.main{background:var(--b-soft);color:var(--b-ink);border-color:transparent}
+
+  /* ---- notes / footer ---- */
+  .notes{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:26px 0 0;font-size:12.5px;color:var(--sub);
+  }
+  .notes b{color:var(--ink);font-size:13px;display:block;margin-bottom:6px}
+  .notes ul{margin:0;padding-left:18px} .notes li{margin-bottom:4px}
+  footer{text-align:center;font-size:11.5px;color:var(--sub);margin:22px 0 6px;line-height:1.9}
+  .skel{height:104px;background:var(--card);border:1px solid var(--line);
+        border-radius:12px;margin-bottom:11px;opacity:.55}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <h1>抄読会 PubMed ダイジェスト</h1>
+    <p class="sub">Impact Factor 5以上の臨床文献を新しい順に各10編</p>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="inner">
+    <label class="sel">
+      <select id="drugSel" aria-label="薬剤を選択">
+        <option value="all">両方を表示</option>
+      </select>
+    </label>
+    <button class="refresh" id="refreshBtn" type="button">更新</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="status" id="status">読み込み中…</div>
+  <div id="app">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+
+  <div class="notes" id="notes" hidden></div>
+
+  <footer>
+    出典：PubMed（NCBI E-utilities）<br>
+    数値・結論を発表資料へ転載する際は必ず原著本文をご確認ください。
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var DATA_URL = "data/latest.json";
+  var $ = function(id){ return document.getElementById(id); };
+  var app = $("app"), statusEl = $("status"), sel = $("drugSel"),
+      btn = $("refreshBtn"), notesEl = $("notes");
+  var DATA = null;
+  var STORE_KEY = "jc_drug_sel";
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
+  }
+
+  function fmtDate(d){
+    if(!d) return "";
+    var p = String(d).split("-");
+    if(p.length >= 3) return p[0] + "年" + (+p[1]) + "月" + (+p[2]) + "日";
+    if(p.length === 2) return p[0] + "年" + (+p[1]) + "月";
+    return p[0] + "年";
+  }
+
+  function cardHTML(a, i){
+    var chips = "";
+    chips += '<span class="chip if">IF ' + esc(a["if"]) + '</span>';
+    if(a.design) chips += '<span class="chip">' + esc(a.design) + '</span>';
+    if(a.n) chips += '<span class="chip">n = ' + esc(a.n) + '</span>';
+    if(a.hasAbstract === false) chips += '<span class="chip warn">抄録なし・本文確認要</span>';
+
+    var h = "";
+    h += '<article>';
+    h +=   '<div class="row1">';
+    h +=     '<span class="no">' + (i + 1) + '</span>';
+    h +=     '<div>';
+    h +=       '<div class="tj">' + esc(a.titleJa || a.title) + '</div>';
+    if(a.titleJa) h += '<div class="te">' + esc(a.title) + '</div>';
+    h +=     '</div>';
+    h +=   '</div>';
+    h +=   '<p class="meta">' + esc(a.authors) + '　<b>' + esc(a.journal) + '</b>　'
+                              + esc(fmtDate(a.date)) + '</p>';
+    h +=   '<div class="chips">' + chips + '</div>';
+    h +=   '<p class="sum">' + esc(a.summary) + '</p>';
+    if(a.point){
+      h += '<details><summary>抄読ポイント</summary>';
+      h +=   '<p class="pt">' + esc(a.point) + '</p></details>';
+    }
+    h +=   '<div class="links">';
+    h +=     '<a class="main" href="https://pubmed.ncbi.nlm.nih.gov/' + esc(a.pmid)
+                            + '/" target="_blank" rel="noopener">PubMed</a>';
+    if(a.doi) h += '<a href="https://doi.org/' + esc(a.doi)
+                            + '" target="_blank" rel="noopener">全文（DOI）</a>';
+    h +=   '</div>';
+    h += '</article>';
+    return h;
+  }
+
+  function sectionHTML(drug){
+    var h = '<section class="sec-' + esc(drug.theme || "a") + '">';
+    h +=   '<div class="sechd"><span class="dot"></span>';
+    h +=     '<h2>' + esc(drug.labelJa) + '</h2>';
+    h +=     '<span class="count">' + drug.articles.length + '編</span></div>';
+    h +=   '<div class="secbar"></div>';
+    if(drug.note) h += '<p class="secnote">' + esc(drug.note) + '</p>';
+    h += drug.articles.map(cardHTML).join("");
+    h += '</section>';
+    return h;
+  }
+
+  function render(){
+    if(!DATA) return;
+    var v = sel.value;
+    var list = DATA.drugs.filter(function(d){ return v === "all" || d.id === v; });
+    if(!list.length){ app.innerHTML = '<p class="status">該当する薬剤がありません。</p>'; return; }
+    app.innerHTML = list.map(sectionHTML).join("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderNotes(){
+    if(!DATA.notes || !DATA.notes.length){ notesEl.hidden = true; return; }
+    notesEl.hidden = false;
+    notesEl.innerHTML = '<b>選定基準と注意点</b><ul>'
+      + DATA.notes.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join("")
+      + '</ul>';
+  }
+
+  function load(bust){
+    btn.disabled = true;
+    statusEl.className = "status";
+    statusEl.textContent = "読み込み中…";
+    var url = DATA_URL + (bust ? "?t=" + Date.now() : "");
+    fetch(url, { cache: bust ? "reload" : "default" })
+      .then(function(r){
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function(json){
+        DATA = json;
+        // build dropdown
+        var prev = localStorage.getItem(STORE_KEY) || "all";
+        sel.innerHTML = '<option value="all">両方を表示</option>'
+          + DATA.drugs.map(function(d){
+              return '<option value="' + esc(d.id) + '">' + esc(d.labelJa) + '</option>';
+            }).join("");
+        sel.value = [ "all" ].concat(DATA.drugs.map(function(d){ return d.id; }))
+                      .indexOf(prev) >= 0 ? prev : "all";
+        statusEl.textContent = "最終更新：" + fmtDate(DATA.generatedAt)
+                             + "　／　IF基準：" + (DATA.ifBasis || "—");
+        render();
+        renderNotes();
+      })
+      .catch(function(e){
+        statusEl.className = "status err";
+        statusEl.textContent = "データを読み込めませんでした（" + e.message
+          + "）。ローカルの file:// で開いた場合はブラウザの制限で読み込めません。"
+          + "ローカルサーバー経由か、公開URLから開いてください。";
+        app.innerHTML = "";
+      })
+      .then(function(){ btn.disabled = false; });
+  }
+
+  sel.addEventListener("change", function(){
+    localStorage.setItem(STORE_KEY, sel.value);
+    render();
+  });
+  btn.addEventListener("click", function(){ load(true); });
+
+  load(false);
+
+  if("serviceWorker" in navigator && location.protocol !== "file:"){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>
