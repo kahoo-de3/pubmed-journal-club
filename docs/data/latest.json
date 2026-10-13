@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06",
+  "generatedAt": "2026-10-14",
   "source": "PubMed (NCBI E-utilities: esearch / esummary / efetch)",
   "ifBasis": "JCR 2024 概数",
   "notes": [
@@ -17,6 +17,21 @@
       "theme": "a",
       "note": "PTHrPアナログ。ACTIVE試験（閉経後女性）・ATOM試験（男性骨粗鬆症）が主要エビデンス基盤。近年の臨床的争点は「骨形成促進薬→骨吸収抑制薬への逐次療法（consolidation）」と「効果の減衰（waning）」。高IF誌の一次臨床試験論文は少なく、二次解析とレビューが中心です。",
       "articles": [
+        {
+          "pmid": "42836541",
+          "title": "Treatment of male osteoporosis: a narrative review and position statement by the ECTS Clinical Action Group",
+          "titleJa": "男性骨粗鬆症の治療：ECTS Clinical Action Groupによるナラティブレビューおよびポジションステートメント",
+          "authors": "Sølling AS, Paccou J, Anastasilakis AD, et al.",
+          "journal": "J Bone Miner Res",
+          "if": "≈6",
+          "date": "2026-10-06",
+          "design": "ナラティブレビュー＋ポジションステートメント（ECTS）",
+          "n": null,
+          "doi": "10.1093/jbmr/zjag145",
+          "hasAbstract": true,
+          "summary": "欧州石灰化組織学会（ECTS）Clinical Action Groupによる男性骨粗鬆症治療のナラティブレビュー兼ポジションステートメント（Online ahead of print）。男性では続発性骨粗鬆症が多く、基礎疾患の同定・管理が不可欠とする。男性を対象としたRCTは閉経後女性より少ないものの、ビスホスホネート・デノスマブ・テリパラチド・アバロパラチド・ロモソズマブはいずれも骨密度（代替エンドポイント）を有意に増加させたと記載。一方、骨折（臨床エンドポイント）のデータは限られ、椎体骨折リスク低下が示されているのはゾレドロン酸・アレンドロン酸・リセドロン酸・デノスマブ・テリパラチドのみとされ、アバロパラチドはこの列挙に含まれていない。骨折リスクが非常に高い男性では骨形成促進薬を第一選択として考慮し、その後に骨吸収抑制薬で骨密度の増加を固定・維持（consolidation）すること、treat-to-target管理と、特にデノスマブ中止時の慎重な中止戦略を推奨。抄録に具体的な数値の記載はない。",
+          "point": "アバロパラチドの男性への適用を論じる際の最新の学会見解。抄録上、男性でのアバロパラチドのエビデンスは骨密度（代替エンドポイント）にとどまり、骨折抑制は示されていない点を区別して議論できる。限界：系統的レビューではなくナラティブレビューであり、文献選択・推奨の根拠の強さ（エビデンスレベル）は抄録からは判断できないため本文確認が必要。"
+        },
         {
           "pmid": "42461643",
           "title": "Hip Fractures: A Review",
@@ -151,21 +166,6 @@
           "hasAbstract": true,
           "summary": "男性骨粗鬆症を対象とした第III相ATOM試験の解析。骨代謝マーカー（空腹時intact PINP、血清CTX）の1・3・6・12か月の変化と12か月時の骨密度増加率の相関をPearson相関で評価し、女性（ACTIVE試験）と比較。アバロパラチド投与男性でPINP増加は1か月 r=0.485、3か月 r=0.614、6か月 r=0.632、12か月 r=0.521と、12か月時の腰椎骨密度増加と高い相関（すべてp<0.0001）。骨形成／骨吸収のバランスを示すuncoupling index（UI）は1か月時点でプラセボを上回り（2.26 vs −0.25）、3か月時点で男性（1.32）が女性（0.88）より大きかった（p<0.001）。3か月時UIと12か月腰椎骨密度の相関は男性 r=0.453（p<0.001）、女性 r=0.252（p<0.01）で、男性でより強い。",
           "point": "男性骨粗鬆症という相対的にエビデンスの乏しい領域の第III相データ。投与1〜3か月のPINPで治療反応性を早期判定できるかというモニタリング戦略の議論に。ただし代替エンドポイント（骨密度）であり骨折抑制ではない。"
-        },
-        {
-          "pmid": "38482603",
-          "title": "Cardiovascular Safety of Romosozumab vs PTH Analogues for Osteoporosis Treatment: A Propensity-Score-Matched Cohort Study",
-          "titleJa": "骨粗鬆症治療におけるロモソズマブ vs PTHアナログの心血管安全性：傾向スコアマッチトコホート研究",
-          "authors": "Stokar J, et al.",
-          "journal": "J Clin Endocrinol Metab",
-          "if": "≈5.0",
-          "date": "2025-02-18",
-          "design": "傾向スコアマッチトコホート",
-          "n": "5,610 × 2群",
-          "doi": "10.1210/clinem/dgae173",
-          "hasAbstract": true,
-          "summary": "TriNetX（16か国113医療機関、約1億3,646万人の電子カルテデータ）を用い、40歳以上・骨粗鬆症診断あり・2019年8月〜2022年8月にロモソズマブまたはPTHアナログ（テリパラチド／アバロパラチド）を処方された患者を比較。傾向スコア1:1マッチング後、各群5,610名。主要評価項目は1年間の3-point MACEまたは死亡。3P-MACEはロモソズマブ群で有意に少なかった（158例 vs 211例、p=0.003）。個別項目も心筋虚血イベント31 vs 58（p=0.003）、脳血管イベント56 vs 79（p=0.037）、死亡83 vs 104（p=0.099）。",
-          "point": "ARCH試験で提起されたロモソズマブの心血管懸念に対する実臨床データ。「PTHアナログ群のほうがMACEが多い」結果をどう解釈するか——適応による交絡、残余交絡、非ランダム化デザインの限界を議論する格好の題材。"
         }
       ]
     },
